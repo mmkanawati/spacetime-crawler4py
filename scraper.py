@@ -1,5 +1,10 @@
 import re
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
+
+uniquePage = set()
+longestPage = 0
+
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -8,14 +13,35 @@ def scraper(url, resp):
 def extract_next_links(url, resp):
     # Implementation required.
     # url: the URL that was used to get the page
+    parsed = urlparse(url)
+    #parsed.fragment = ""
+
     # resp.url: the actual url of the page
     # resp.status: the status code returned by the server. 200 is OK, you got the page. Other numbers mean that there was some kind of problem.
+    
+    if resp.status == 200:
+
+        
+
     # resp.error: when status is not 200, you can check the error here, if needed.
     # resp.raw_response: this is where the page actually is. More specifically, the raw_response has two parts:
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
-    return list()
+    else:
+        print("Status Error: ", resp.status)
+        print("Error: ", resp.error)
+        return []
+
+def canCrawl(url):
+
+    domains ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu", 
+    "today.uci.edu"]
+
+    for domain in domains:
+        if domain in url:
+            return True
+
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -23,8 +49,12 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
+        
         if parsed.scheme not in set(["http", "https"]):
             return False
+        if not canCrawl(url):              #Call canCrawl to check whether we can crawl this url or not
+            return False
+        
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
