@@ -18,12 +18,12 @@ def extract_next_links(url, resp):
 
     # resp.url: the actual url of the page
     # resp.status: the status code returned by the server. 200 is OK, you got the page. Other numbers mean that there was some kind of problem.
-    
+    url_links = []
+
     if resp.status == 200:
 
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
         text = soup.get_text()
-        url_links = []
 
         #Pages with high textual informational content (based on text)
         if len(text) >= 1300:
