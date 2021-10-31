@@ -45,8 +45,7 @@ def extract_next_links(url, resp):
 
 def canCrawl(url):
 
-    domains ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu", 
-    "today.uci.edu"]
+    domains = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu", "today.uci.edu"]
 
     for domain in domains:
         if domain in url:
