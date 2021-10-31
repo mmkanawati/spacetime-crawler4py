@@ -1,9 +1,12 @@
 import re
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
+import urllib.request as urllib 
 
 uniquePage = set()
-#longestPage = 0
+longestPage = 0
+commonWords = []
+subDomainCount = {}
 
 
 def scraper(url, resp):
@@ -22,6 +25,7 @@ def extract_next_links(url, resp):
 
     if resp.status == 200 and is_valid(resp.raw_response.url):
 
+        
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
         text = soup.get_text()
 
@@ -31,10 +35,18 @@ def extract_next_links(url, resp):
 
             for link in soup.find_all('a', href=True):
                 
+                link = link.get('href')
+
                 if link != None:
 
-                    url_links.append(link.get('href'))
-                    uniquePage.add(link.get('href'))
+                    parsed = urlparse(link)
+                    
+                    fragment = parsed.fragment
+
+                    link = link.replace(fragment, "")
+
+                    url_links.append(link)
+                    uniquePage.add(link)
         return url_links
 
     # resp.error: when status is not 200, you can check the error here, if needed.
