@@ -1,7 +1,8 @@
 import re
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
-import urllib.request as urllib 
+import urllib.request as urllib
+import pickle
 
 uniquePage = set()
 longestPage = 0
@@ -79,6 +80,8 @@ def is_valid(url):
         if parsed.scheme not in set(["http", "https"]):
             return False
         if not canCrawl(url):              #Call canCrawl to check whether we can crawl this url or not
+            return False
+        if 'replytocom' in parsed.query: 
             return False
         
         return not re.match(
