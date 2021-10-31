@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 uniquePage = set()
-longestPage = 0
+#longestPage = 0
 
 
 def scraper(url, resp):
@@ -13,7 +13,7 @@ def scraper(url, resp):
 def extract_next_links(url, resp):
     # Implementation required.
     # url: the URL that was used to get the page
-    parsed = urlparse(url)
+    #parsed = urlparse(url)
     #parsed.fragment = ""
 
     # resp.url: the actual url of the page
@@ -21,7 +21,17 @@ def extract_next_links(url, resp):
     
     if resp.status == 200:
 
-        
+        soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
+        text = soup.get_text()
+        url_links = []
+
+        #Pages with high textual informational content (based on text)
+        if len(text) >= 1300:
+
+            for link in soup.find_all('a', href=True):
+                url_links.append(link.get('href'))
+                uniquePage.add(link.get('href'))
+            return url_links
 
     # resp.error: when status is not 200, you can check the error here, if needed.
     # resp.raw_response: this is where the page actually is. More specifically, the raw_response has two parts:
@@ -68,3 +78,6 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
+
+
+print("unique: ", uniquePage)
