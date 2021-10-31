@@ -28,9 +28,13 @@ def extract_next_links(url, resp):
         #Pages with high textual informational content (based on text)
         if len(text) >= 1300:
 
+
             for link in soup.find_all('a', href=True):
-                url_links.append(link.get('href'))
-                uniquePage.add(link.get('href'))
+                
+                if link != None:
+
+                    url_links.append(link.get('href'))
+                    uniquePage.add(link.get('href'))
         return url_links
 
     # resp.error: when status is not 200, you can check the error here, if needed.
@@ -41,7 +45,7 @@ def extract_next_links(url, resp):
     else:
         print("Status Error: ", resp.status)
         print("Error: ", resp.error)
-        return url_links
+        return []
 
 def canCrawl(url):
 
