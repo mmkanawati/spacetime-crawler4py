@@ -31,7 +31,7 @@ def extract_next_links(url, resp):
             for link in soup.find_all('a', href=True):
                 url_links.append(link.get('href'))
                 uniquePage.add(link.get('href'))
-            return url_links
+        return url_links
 
     # resp.error: when status is not 200, you can check the error here, if needed.
     # resp.raw_response: this is where the page actually is. More specifically, the raw_response has two parts:
@@ -41,7 +41,7 @@ def extract_next_links(url, resp):
     else:
         print("Status Error: ", resp.status)
         print("Error: ", resp.error)
-        return []
+        return url_links
 
 def canCrawl(url):
 
