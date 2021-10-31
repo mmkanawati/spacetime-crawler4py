@@ -39,11 +39,12 @@ def extract_next_links(url, resp):
 
                 if link != None:
 
-                    parsed = urlparse(link)
+                    #parsed = urlparse(link)
                     
-                    fragment = parsed.fragment
+                    #fragment = parsed.fragment
 
-                    link = link.replace(fragment, "")
+                    #link = link.replace(fragment, "")
+                    link = link.split('#')[0]
 
                     url_links.append(link)
                     uniquePage.add(link)
