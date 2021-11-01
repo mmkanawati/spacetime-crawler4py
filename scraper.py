@@ -4,10 +4,6 @@ from bs4 import BeautifulSoup
 import urllib.request as urllib
 import pickle
 
-uniquePage = set()
-longestPage = 0
-commonWords = []
-subDomainCount = {}
 
 
 def scraper(url, resp):
@@ -25,7 +21,6 @@ def extract_next_links(url, resp):
     url_links = []
 
     if resp.status == 200 and is_valid(resp.raw_response.url):
-
         
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
         text = soup.get_text()
@@ -33,6 +28,11 @@ def extract_next_links(url, resp):
         #Pages with high textual informational content (based on text)
         if len(text) >= 1300:
 
+            numberOfWords = wordCount(text)
+
+            with open("urlWordCount.txt", 'a') as file:
+                
+                file.write(url + ": " + str(numberOfWords) + "\n")              #"cs.uci.edu: 10"
 
             for link in soup.find_all('a', href=True):
                 
@@ -40,15 +40,11 @@ def extract_next_links(url, resp):
 
                 if link != None:
 
-                    #parsed = urlparse(link)
-                    
-                    #fragment = parsed.fragment
-
-                    #link = link.replace(fragment, "")
                     link = link.split('#')[0]
 
                     url_links.append(link)
-                    uniquePage.add(link)
+
+            
         return url_links
 
     # resp.error: when status is not 200, you can check the error here, if needed.
@@ -69,6 +65,13 @@ def canCrawl(url):
         if domain in url:
             return True
 
+def wordCount(urlText):
+
+    words = urlText.replace("_", "")
+    words = re.split("\W+", words.strip())
+    
+    return len(words)
+
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -81,6 +84,9 @@ def is_valid(url):
             return False
         if not canCrawl(url):              #Call canCrawl to check whether we can crawl this url or not
             return False
+
+        #x = set()
+        
         if 'replytocom' in parsed.query: 
             return False
         
@@ -97,6 +103,3 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
-
-
-print("unique: ", uniquePage)
