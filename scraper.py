@@ -32,7 +32,7 @@ def extract_next_links(url, resp):
 
             with open("urlWordCount.txt", 'a') as file:
                 
-                file.write(url + ": " + str(numberOfWords) + "\n")              #"cs.uci.edu: 10"
+                file.write(url + " " + str(numberOfWords) + "\n")              #"cs.uci.edu: 10"
 
             for link in soup.find_all('a', href=True):
                 
@@ -67,7 +67,7 @@ def canCrawl(url):
 
 def wordCount(urlText):
 
-    words = urlText.replace("_", "")
+    words = urlText.replace("_", " ")
     words = re.split("\W+", words.strip())
     
     return len(words)
@@ -85,8 +85,17 @@ def is_valid(url):
         if not canCrawl(url):              #Call canCrawl to check whether we can crawl this url or not
             return False
 
-        #x = set()
-        
+
+        if parsed.path:         
+            path = parsed.path.split("/")
+
+            if len(path) > 2:
+                for i in range(1, len(path) - 1):
+
+                    if path[i] == path[i+1]:
+
+                        return False
+
         if 'replytocom' in parsed.query: 
             return False
         
