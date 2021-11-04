@@ -20,7 +20,7 @@ def extract_next_links(url, resp):
     # resp.status: the status code returned by the server. 200 is OK, you got the page. Other numbers mean that there was some kind of problem.
     url_links = []
 
-    if resp.status == 200 and is_valid(resp.raw_response.url):
+    if resp.status == 200 and resp.raw_response and is_valid(resp.raw_response.url):
         
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
         text = soup.get_text()

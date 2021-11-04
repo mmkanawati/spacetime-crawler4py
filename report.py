@@ -39,10 +39,11 @@ def subDomains():
 
             url = line.split(" ")[0]
 
-            if "ics.uci.edu" in url and not "informatics.uci.edu" in url:
+            if ("ics.uci.edu") in url and (not "informatics.uci.edu" in url):
 
                 parsed = urlparse(url)
-                subDomain[parsed.scheme + "://" + parsed.netloc] += 1
+                #subDomain[parsed.scheme + "://" + parsed.netloc] += 1
+                subDomain[parsed.netloc] += 1
 
             line = file.readline()
             
