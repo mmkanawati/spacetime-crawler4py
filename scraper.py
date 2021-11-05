@@ -53,8 +53,8 @@ def extract_next_links(url, resp):
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
     else:
-        print("Status Error: ", resp.status)
-        print("Error: ", resp.error)
+        #print("Status Error: ", resp.status)
+        #print("Error: ", resp.error)
         return []
 
 def canCrawl(url):
@@ -98,12 +98,18 @@ def is_valid(url):
 
         if 'replytocom' in parsed.query: 
             return False
+
+        if "people" in parsed.path:
+            return False
+
+        if "honors" in parsed.path:
+            return False
         
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
             + r"|wav|avi|mov|mpeg|ram|m4v|mkv|ogg|ogv|pdf"
-            + r"|ps|eps|tex|ppt|pptx|doc|docx|xls|xlsx|names"
+            + r"|ps|eps|tex|ppt|pptx|ppsx|doc|docx|xls|xlsx|names"
             + r"|data|dat|exe|bz2|tar|msi|bin|7z|psd|dmg|iso"
             + r"|epub|dll|cnf|tgz|sha1"
             + r"|thmx|mso|arff|rtf|jar|csv"

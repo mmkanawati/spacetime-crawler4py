@@ -15,8 +15,9 @@ def maxWord():
 
         while line: 
 
+            print(line)
             contents = line.split(" ")
-            count = int(contents[1])
+            count = int(contents[-1])
             url = contents[0]
 
             if count > maxCount:
@@ -39,7 +40,7 @@ def subDomains():
 
             url = line.split(" ")[0]
 
-            if ("ics.uci.edu") in url and (not "informatics.uci.edu" in url):
+            if ("ics.uci.edu") in url and (not "informatics.ics.uci.edu" in url):
 
                 parsed = urlparse(url)
                 #subDomain[parsed.scheme + "://" + parsed.netloc] += 1
