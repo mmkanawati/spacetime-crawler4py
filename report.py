@@ -79,7 +79,6 @@ def commonWords():
     f = open("stopWords.txt", "r")
 
     stopWords = f.read()
-    #print(stopWords)
 
     with open("urlWordCount.txt", "r") as file:
 
@@ -88,7 +87,6 @@ def commonWords():
         while line:
 
             url = line.split(" ")[0]
-            #print(url)
 
             f = requests.get(url)
 
@@ -102,7 +100,13 @@ def commonWords():
 
                 if not word in stopWords:
 
-                    wordFreq[word] += 1                    
+                    wordFreq[word] += 1     
+
+            sortedDict = sorted(wordFreq.items(), key=lambda x: x[1], reverse=True)
+            sortedDict = sortedDict[:100]
+            tempDict = dict(sortedDict)
+
+            wordFreq = defaultdict(int, tempDict)
 
             line = file.readline()
 
