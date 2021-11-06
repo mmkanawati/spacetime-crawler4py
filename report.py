@@ -40,7 +40,7 @@ def subDomains():
 
             url = line.split(" ")[0]
 
-            if ("ics.uci.edu") in url and (not "informatics.ics.uci.edu" in url):
+            if ("ics.uci.edu") in url and (not "informatics.uci.edu" in url):
 
                 parsed = urlparse(url)
                 #subDomain[parsed.scheme + "://" + parsed.netloc] += 1
@@ -48,10 +48,11 @@ def subDomains():
 
             line = file.readline()
             
-    for key,value in subDomain.items():
-        print(f"{key}, {value}")
+    #for key,value in subDomain.items():
+        #print(f"{key}, {value}")
 
-    print("subdomain done")
+    #print("subdomain done")
+    return sorted(subDomain.items())
 
 def uniquePages():
 
@@ -97,8 +98,9 @@ def commonWords():
             words = re.split("\W+", words.strip())
 
             for word in words:
+                word = word.lower()
 
-                if not word in stopWords:
+                if not word in stopWords and len(word) > 1 and word.isalnum():
 
                     wordFreq[word] += 1     
 
@@ -108,6 +110,8 @@ def commonWords():
 
             wordFreq = defaultdict(int, tempDict)
 
+            #print("next file", wordFreq)
+
             line = file.readline()
 
     sortedFreq = sorted(wordFreq.items(), key=lambda x: x[1], reverse=True)
@@ -116,7 +120,15 @@ def commonWords():
     return sortedFreq[:50]
 
 if __name__ == '__main__':
-    print(maxWord(), "maxUrl")
-    subDomains()
-    print(commonWords())
-    print(uniquePages())
+    with open("reportFile.txt", "w") as file:
+        file.write("Names: Lauren Pamintuan, Andrew Yusuf, Yocelyne Hernandez, Mohammad Kanawati\n")
+        file.write("1. Number of Unique Pages: " + uniquePages())
+        file.write("2. Page with most amount of words: " + maxWord() + "\n")
+        #file.write("3. 50 Most common words: " + commonWords())
+        file.write("4. Subdomains: ")
+        sub = subDomains()
+        for key,value in sub.items():
+            file.write(f"{key}, {value}\n")
+        file.write("Subdomain count: " + str(len(sub)))
+
+    commonWords()
