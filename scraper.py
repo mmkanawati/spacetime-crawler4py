@@ -20,27 +20,27 @@ def extract_next_links(url, resp):
     # resp.status: the status code returned by the server. 200 is OK, you got the page. Other numbers mean that there was some kind of problem.
     url_links = []
 
-    if resp.status == 200 and resp.raw_response and is_valid(resp.raw_response.url):
+    if resp.status == 200 and resp.raw_response and is_valid(resp.raw_response.url):       #checking if status 200 and that resp.raw_response is not None
         
         soup = BeautifulSoup(resp.raw_response.content, 'html.parser')
-        text = soup.get_text()
+        text = soup.get_text()                                                      #gets the text of the page
 
         #Pages with high textual informational content (based on text)
         if len(text) >= 1300:
 
-            numberOfWords = wordCount(text)
+            numberOfWords = wordCount(text)                                 
 
-            with open("urlWordCount.txt", 'a') as file:
+            with open("urlWordCount.txt", 'a') as file:                         #We write to a text file the url and word count
                 
                 file.write(url + " " + str(numberOfWords) + "\n")              #"cs.uci.edu: 10"
 
-            for link in soup.find_all('a', href=True):
+            for link in soup.find_all('a', href=True):                  
                 
-                link = link.get('href')
+                link = link.get('href')                             #get the links href to get next links
 
-                if link != None:
+                if link != None:                                    #checks if its None
 
-                    link = link.split('#')[0]
+                    link = link.split('#')[0]                       #We defragment the link by splitting by # and indexing the 0th index
 
                     url_links.append(link)
 
@@ -68,7 +68,7 @@ def canCrawl(url):
 def wordCount(urlText):
 
     words = urlText.replace("_", " ")
-    words = re.split("\W+", words.strip())
+    words = re.split("\W+", words.strip())      #splitig by any character which is not a word character
     
     return len(words)
 
@@ -82,27 +82,27 @@ def is_valid(url):
         
         if parsed.scheme not in set(["http", "https"]):
             return False
-        if not canCrawl(url):              #Call canCrawl to check whether we can crawl this url or not
+        if not canCrawl(url):              #Call canCrawl to check whether we can crawl this url or not by seeing if its one of the given domains if not, return false
             return False
 
 
-        if parsed.path:         
-            path = parsed.path.split("/")
+        if parsed.path:                         #trap checking, if the url has a path
+            path = parsed.path.split("/")               #if so, split by /
 
-            if len(path) > 2:
-                for i in range(1, len(path) - 1):
+            if len(path) > 2:                           #if its length is greater than 2, because we have ["", department, department] Ex path: /department/department
+                for i in range(1, len(path) - 1):       #
 
                     if path[i] == path[i+1]:
 
                         return False
 
-        if 'replytocom' in parsed.query: 
+        if 'replytocom' in parsed.query:                #We decided this page did not have any useful information and just had many comments on comments    
             return False
 
-        if "people" in parsed.path:
+        if "people" in parsed.path:              #mt-live website only had a little bit of useful information regarding faculty and the rest was not useful since it tried every combination of filters with faculty
             return False
 
-        if "honors" in parsed.path:
+        if "honors" in parsed.path:             #We heard a students crawler try to access an honors page which requires fingerprint but just blacklisted it in case
             return False
         
         return not re.match(
